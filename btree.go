@@ -1,7 +1,9 @@
 package tree
 
 import (
+	"bytes"
 	"fmt"
+	"reflect"
 )
 
 // Btree represents an AVL tree
@@ -326,7 +328,7 @@ func (t *Btree) Debug() {
 	}
 
 	t.Ascend(func(n *Node, i int) bool {
-		if t.root.Value == n.Value {
+		if reflect.DeepEqual(t.root.Value, n.Value) {
 			fmt.Print("ROOT ** ")
 		}
 		n.Debug()
@@ -572,4 +574,11 @@ func (i ByteVal) Comp(val Val) int8 {
 	} else {
 		return 0
 	}
+}
+
+type ByteSliceVal []byte
+
+func (i ByteSliceVal) Comp(val Val) int8 {
+	v := val.(ByteSliceVal)
+	return int8(bytes.Compare(i, v))
 }
